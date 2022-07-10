@@ -1,0 +1,51 @@
+syntax = "proto3";
+package sujine.test.test;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
+import "test/params.proto";
+// this line is used by starport scaffolding # 1
+
+option go_package = "github.com/sujine/test/x/test/types";
+
+// Query defines the gRPC querier service.
+service Query {
+  // Parameters queries the parameters of the module.
+  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+    option (google.api.http).get = "/sujine/test/test/params";
+  }
+  // Queries a list of GetCoin items.
+	rpc GetCoin(QueryGetCoinRequest) returns (QueryGetCoinResponse) {
+		option (google.api.http).get = "/sujine/test/test/get_coin";
+	}
+
+// Queries a list of GetInfo items.
+	rpc GetInfo(QueryGetInfoRequest) returns (QueryGetInfoResponse) {
+		option (google.api.http).get = "/sujine/test/test/get_info/{creator}/{denom}";
+	}
+
+// this line is used by starport scaffolding # 2
+}
+
+// QueryParamsRequest is request type for the Query/Params RPC method.
+message QueryParamsRequest {}
+
+// QueryParamsResponse is response type for the Query/Params RPC method.
+message QueryParamsResponse {
+  // params holds all the parameters of this module.
+  Params params = 1 [(gogoproto.nullable) = false];
+}
+
+
+message QueryGetInfoRequest {
+  string creator = 1;
+  string denom = 2;
+}
+
+message QueryGetInfoResponse {
+  string denom = 1;
+  string info = 2;
+}
+
+// this line is used by starport scaffolding # 3
