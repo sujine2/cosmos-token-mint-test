@@ -10,10 +10,23 @@ import (
 func (k msgServer) MintCoin(goCtx context.Context, msg *types.MsgMintCoin) (*types.MsgMintCoinResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	newCoin := sdk.NewCoin(msg.Denom, sdk.NewInt(int64(msg.Amount)))
+	// _, isFound := k.GetSymbolList(ctx, msg.Denom)
+	// if isFound {
+	// 	return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "Symbol already in used")
+
+	// }
+	newCoin := sdk.NewInt64Coin(msg.Denom, int64(msg.Amount))
 	newCoins := sdk.NewCoins(newCoin)
 	k.bankKeeper.MintCoins(ctx, types.ModuleName, newCoins)
-	k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, sdk.AccAddress(msg.Creator), newCoins)
+	address, _ := sdk.AccAddressFromBech32(msg.Creator)
+	k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ModuleName, address, newCoins)
+
+	newSymbol := types.SymbolList{
+		Index:   msg.Denom,
+		Creator: msg.Creator,
+		Symbole: msg.Denom,
+	}
+	k.SetSymbolList(ctx, newSymbol)
 
 	return &types.MsgMintCoinResponse{}, nil
 }

@@ -20,8 +20,11 @@ func NewHandler(k keeper.Keeper) sdk.Handler {
 		case *types.MsgMintCoin:
 			res, err := msgServer.MintCoin(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
-		case *types.MsgGetCoin:
-			res, err := msgServer.GetCoin(sdk.WrapSDKContext(ctx), msg)
+		case *types.MsgRegisterCoin:
+			res, err := msgServer.RegisterCoin(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+		case *types.MsgBuyCoin:
+			res, err := msgServer.BuyCoin(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 			// this line is used by starport scaffolding # 1
 		default:

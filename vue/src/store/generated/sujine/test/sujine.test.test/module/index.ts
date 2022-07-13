@@ -4,13 +4,15 @@ import { StdFee } from "@cosmjs/launchpad";
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { Registry, OfflineSigner, EncodeObject, DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
+import { MsgRegisterCoin } from "./types/test/tx";
+import { MsgBuyCoin } from "./types/test/tx";
 import { MsgMintCoin } from "./types/test/tx";
-import { MsgGetCoin } from "./types/test/tx";
 
 
 const types = [
+  ["/sujine.test.test.MsgRegisterCoin", MsgRegisterCoin],
+  ["/sujine.test.test.MsgBuyCoin", MsgBuyCoin],
   ["/sujine.test.test.MsgMintCoin", MsgMintCoin],
-  ["/sujine.test.test.MsgGetCoin", MsgGetCoin],
   
 ];
 export const MissingWalletError = new Error("wallet is required");
@@ -43,8 +45,9 @@ const txClient = async (wallet: OfflineSigner, { addr: addr }: TxClientOptions =
 
   return {
     signAndBroadcast: (msgs: EncodeObject[], { fee, memo }: SignAndBroadcastOptions = {fee: defaultFee, memo: ""}) => client.signAndBroadcast(address, msgs, fee,memo),
+    msgRegisterCoin: (data: MsgRegisterCoin): EncodeObject => ({ typeUrl: "/sujine.test.test.MsgRegisterCoin", value: MsgRegisterCoin.fromPartial( data ) }),
+    msgBuyCoin: (data: MsgBuyCoin): EncodeObject => ({ typeUrl: "/sujine.test.test.MsgBuyCoin", value: MsgBuyCoin.fromPartial( data ) }),
     msgMintCoin: (data: MsgMintCoin): EncodeObject => ({ typeUrl: "/sujine.test.test.MsgMintCoin", value: MsgMintCoin.fromPartial( data ) }),
-    msgGetCoin: (data: MsgGetCoin): EncodeObject => ({ typeUrl: "/sujine.test.test.MsgGetCoin", value: MsgGetCoin.fromPartial( data ) }),
     
   };
 };

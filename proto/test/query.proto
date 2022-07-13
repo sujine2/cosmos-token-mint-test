@@ -5,6 +5,8 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "test/params.proto";
+import "test/sell_coin.proto";
+import "test/symbol_list.proto";
 // this line is used by starport scaffolding # 1
 
 option go_package = "github.com/sujine/test/x/test/types";
@@ -15,14 +17,30 @@ service Query {
   rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/sujine/test/test/params";
   }
-  // Queries a list of GetCoin items.
-	rpc GetCoin(QueryGetCoinRequest) returns (QueryGetCoinResponse) {
-		option (google.api.http).get = "/sujine/test/test/get_coin";
-	}
 
 // Queries a list of GetInfo items.
 	rpc GetInfo(QueryGetInfoRequest) returns (QueryGetInfoResponse) {
 		option (google.api.http).get = "/sujine/test/test/get_info/{creator}/{denom}";
+	}
+
+// Queries a SellCoin by index.
+	rpc SellCoin(QueryGetSellCoinRequest) returns (QueryGetSellCoinResponse) {
+		option (google.api.http).get = "/sujine/test/test/sell_coin/{index}";
+	}
+
+	// Queries a list of SellCoin items.
+	rpc SellCoinAll(QueryAllSellCoinRequest) returns (QueryAllSellCoinResponse) {
+		option (google.api.http).get = "/sujine/test/test/sell_coin";
+	}
+
+// Queries a SymbolList by index.
+	rpc SymbolList(QueryGetSymbolListRequest) returns (QueryGetSymbolListResponse) {
+		option (google.api.http).get = "/sujine/test/test/symbol_list/{index}";
+	}
+
+	// Queries a list of SymbolList items.
+	rpc SymbolListAll(QueryAllSymbolListRequest) returns (QueryAllSymbolListResponse) {
+		option (google.api.http).get = "/sujine/test/test/symbol_list";
 	}
 
 // this line is used by starport scaffolding # 2
@@ -46,6 +64,42 @@ message QueryGetInfoRequest {
 message QueryGetInfoResponse {
   string denom = 1;
   string info = 2;
+}
+
+message QueryGetSellCoinRequest {
+	  string index = 1;
+
+}
+
+message QueryGetSellCoinResponse {
+	SellCoin sellCoin = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllSellCoinRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllSellCoinResponse {
+	repeated SellCoin sellCoin = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+
+message QueryGetSymbolListRequest {
+	  string index = 1;
+
+}
+
+message QueryGetSymbolListResponse {
+	SymbolList symbolList = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllSymbolListRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllSymbolListResponse {
+	repeated SymbolList symbolList = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 // this line is used by starport scaffolding # 3

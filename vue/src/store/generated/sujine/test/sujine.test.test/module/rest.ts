@@ -20,26 +20,58 @@ export interface RpcStatus {
   details?: ProtobufAny[];
 }
 
-export interface TestMsgGetCoinResponse {
-  denom?: string;
-  amount?: string;
-}
+export type TestMsgBuyCoinResponse = object;
 
 export type TestMsgMintCoinResponse = object;
+
+export type TestMsgRegisterCoinResponse = object;
 
 /**
  * Params defines the parameters for the module.
  */
 export type TestParams = object;
 
-export interface TestQueryGetCoinResponse {
-  denom?: string;
-  amount?: string;
+export interface TestQueryAllSellCoinResponse {
+  sellCoin?: TestSellCoin[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
+}
+
+export interface TestQueryAllSymbolListResponse {
+  symbolList?: TestSymbolList[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
 }
 
 export interface TestQueryGetInfoResponse {
   denom?: string;
   info?: string;
+}
+
+export interface TestQueryGetSellCoinResponse {
+  sellCoin?: TestSellCoin;
+}
+
+export interface TestQueryGetSymbolListResponse {
+  symbolList?: TestSymbolList;
 }
 
 /**
@@ -48,6 +80,87 @@ export interface TestQueryGetInfoResponse {
 export interface TestQueryParamsResponse {
   /** params holds all the parameters of this module. */
   params?: TestParams;
+}
+
+export interface TestSellCoin {
+  index?: string;
+  creator?: string;
+  symbole?: string;
+
+  /** @format uint64 */
+  price?: string;
+
+  /** @format uint64 */
+  amount?: string;
+}
+
+export interface TestSymbolList {
+  index?: string;
+  creator?: string;
+  symbole?: string;
+}
+
+/**
+* message SomeRequest {
+         Foo some_parameter = 1;
+         PageRequest pagination = 2;
+ }
+*/
+export interface V1Beta1PageRequest {
+  /**
+   * key is a value returned in PageResponse.next_key to begin
+   * querying the next page most efficiently. Only one of offset or key
+   * should be set.
+   * @format byte
+   */
+  key?: string;
+
+  /**
+   * offset is a numeric offset that can be used when key is unavailable.
+   * It is less efficient than using key. Only one of offset or key should
+   * be set.
+   * @format uint64
+   */
+  offset?: string;
+
+  /**
+   * limit is the total number of results to be returned in the result page.
+   * If left empty it will default to a value to be set by each app.
+   * @format uint64
+   */
+  limit?: string;
+
+  /**
+   * count_total is set to true  to indicate that the result set should include
+   * a count of the total number of items available for pagination in UIs.
+   * count_total is only respected when offset is used. It is ignored when key
+   * is set.
+   */
+  count_total?: boolean;
+
+  /**
+   * reverse is set to true if results are to be returned in the descending order.
+   *
+   * Since: cosmos-sdk 0.43
+   */
+  reverse?: boolean;
+}
+
+/**
+* PageResponse is to be embedded in gRPC response messages where the
+corresponding request message has used PageRequest.
+
+ message SomeResponse {
+         repeated Bar results = 1;
+         PageResponse page = 2;
+ }
+*/
+export interface V1Beta1PageResponse {
+  /** @format byte */
+  next_key?: string;
+
+  /** @format uint64 */
+  total?: string;
 }
 
 export type QueryParamsType = Record<string | number, any>;
@@ -250,23 +363,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * No description
    *
    * @tags Query
-   * @name QueryGetCoin
-   * @summary Queries a list of GetCoin items.
-   * @request GET:/sujine/test/test/get_coin
-   */
-  queryGetCoin = (query?: { creator?: string; denom?: string }, params: RequestParams = {}) =>
-    this.request<TestQueryGetCoinResponse, RpcStatus>({
-      path: `/sujine/test/test/get_coin`,
-      method: "GET",
-      query: query,
-      format: "json",
-      ...params,
-    });
-
-  /**
-   * No description
-   *
-   * @tags Query
    * @name QueryGetInfo
    * @summary Queries a list of GetInfo items.
    * @request GET:/sujine/test/test/get_info/{creator}/{denom}
@@ -290,6 +386,90 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryParams = (params: RequestParams = {}) =>
     this.request<TestQueryParamsResponse, RpcStatus>({
       path: `/sujine/test/test/params`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QuerySellCoinAll
+   * @summary Queries a list of SellCoin items.
+   * @request GET:/sujine/test/test/sell_coin
+   */
+  querySellCoinAll = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<TestQueryAllSellCoinResponse, RpcStatus>({
+      path: `/sujine/test/test/sell_coin`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QuerySellCoin
+   * @summary Queries a SellCoin by index.
+   * @request GET:/sujine/test/test/sell_coin/{index}
+   */
+  querySellCoin = (index: string, params: RequestParams = {}) =>
+    this.request<TestQueryGetSellCoinResponse, RpcStatus>({
+      path: `/sujine/test/test/sell_coin/${index}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QuerySymbolListAll
+   * @summary Queries a list of SymbolList items.
+   * @request GET:/sujine/test/test/symbol_list
+   */
+  querySymbolListAll = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<TestQueryAllSymbolListResponse, RpcStatus>({
+      path: `/sujine/test/test/symbol_list`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QuerySymbolList
+   * @summary Queries a SymbolList by index.
+   * @request GET:/sujine/test/test/symbol_list/{index}
+   */
+  querySymbolList = (index: string, params: RequestParams = {}) =>
+    this.request<TestQueryGetSymbolListResponse, RpcStatus>({
+      path: `/sujine/test/test/symbol_list/${index}`,
       method: "GET",
       format: "json",
       ...params,

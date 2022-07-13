@@ -32,6 +32,14 @@ const (
 	// TODO: Determine the simulation weight value
 	defaultWeightMsgGetCoin int = 100
 
+	opWeightMsgRegisterCoin = "op_weight_msg_register_coin"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgRegisterCoin int = 100
+
+	opWeightMsgBuyCoin = "op_weight_msg_buy_coin"
+	// TODO: Determine the simulation weight value
+	defaultWeightMsgBuyCoin int = 100
+
 	// this line is used by starport scaffolding # simapp/module/const
 )
 
@@ -83,9 +91,27 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 			weightMsgGetCoin = defaultWeightMsgGetCoin
 		},
 	)
+
+	var weightMsgRegisterCoin int
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgRegisterCoin, &weightMsgRegisterCoin, nil,
+		func(_ *rand.Rand) {
+			weightMsgRegisterCoin = defaultWeightMsgRegisterCoin
+		},
+	)
 	operations = append(operations, simulation.NewWeightedOperation(
-		weightMsgGetCoin,
-		testsimulation.SimulateMsgGetCoin(am.accountKeeper, am.bankKeeper, am.keeper),
+		weightMsgRegisterCoin,
+		testsimulation.SimulateMsgRegisterCoin(am.accountKeeper, am.bankKeeper, am.keeper),
+	))
+
+	var weightMsgBuyCoin int
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgBuyCoin, &weightMsgBuyCoin, nil,
+		func(_ *rand.Rand) {
+			weightMsgBuyCoin = defaultWeightMsgBuyCoin
+		},
+	)
+	operations = append(operations, simulation.NewWeightedOperation(
+		weightMsgBuyCoin,
+		testsimulation.SimulateMsgBuyCoin(am.accountKeeper, am.bankKeeper, am.keeper),
 	))
 
 	// this line is used by starport scaffolding # simapp/module/operation

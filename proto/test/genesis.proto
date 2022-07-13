@@ -3,6 +3,8 @@ package sujine.test.test;
 
 import "gogoproto/gogo.proto";
 import "test/params.proto";
+import "test/sell_coin.proto";
+import "test/symbol_list.proto";
 // this line is used by starport scaffolding # genesis/proto/import
 
 option go_package = "github.com/sujine/test/x/test/types";
@@ -10,5 +12,7 @@ option go_package = "github.com/sujine/test/x/test/types";
 // GenesisState defines the test module's genesis state.
 message GenesisState {
   Params params = 1 [(gogoproto.nullable) = false];
+  repeated SellCoin sellCoinList = 2 [(gogoproto.nullable) = false];
+  repeated SymbolList symbolListList = 3 [(gogoproto.nullable) = false];
   // this line is used by starport scaffolding # genesis/proto/state
 }

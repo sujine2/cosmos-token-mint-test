@@ -9,7 +9,8 @@ import (
 
 func RegisterCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgMintCoin{}, "test/MintCoin", nil)
-	cdc.RegisterConcrete(&MsgGetCoin{}, "test/GetCoin", nil)
+	cdc.RegisterConcrete(&MsgRegisterCoin{}, "test/RegisterCoin", nil)
+	cdc.RegisterConcrete(&MsgBuyCoin{}, "test/BuyCoin", nil)
 	// this line is used by starport scaffolding # 2
 }
 
@@ -17,8 +18,12 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgMintCoin{},
 	)
+
 	registry.RegisterImplementations((*sdk.Msg)(nil),
-		&MsgGetCoin{},
+		&MsgRegisterCoin{},
+	)
+	registry.RegisterImplementations((*sdk.Msg)(nil),
+		&MsgBuyCoin{},
 	)
 	// this line is used by starport scaffolding # 3
 

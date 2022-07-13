@@ -12,14 +12,22 @@ export interface MsgMintCoin {
 
 export interface MsgMintCoinResponse {}
 
-export interface MsgGetCoin {
+export interface MsgRegisterCoin {
   creator: string;
+  symbol: string;
+  price: number;
+  amount: number;
 }
 
-export interface MsgGetCoinResponse {
-  denom: string;
-  amount: string;
+export interface MsgRegisterCoinResponse {}
+
+export interface MsgBuyCoin {
+  creator: string;
+  symbol: string;
+  amount: number;
 }
+
+export interface MsgBuyCoinResponse {}
 
 const baseMsgMintCoin: object = { creator: "", denom: "", amount: 0 };
 
@@ -148,26 +156,49 @@ export const MsgMintCoinResponse = {
   },
 };
 
-const baseMsgGetCoin: object = { creator: "" };
+const baseMsgRegisterCoin: object = {
+  creator: "",
+  symbol: "",
+  price: 0,
+  amount: 0,
+};
 
-export const MsgGetCoin = {
-  encode(message: MsgGetCoin, writer: Writer = Writer.create()): Writer {
+export const MsgRegisterCoin = {
+  encode(message: MsgRegisterCoin, writer: Writer = Writer.create()): Writer {
     if (message.creator !== "") {
       writer.uint32(10).string(message.creator);
+    }
+    if (message.symbol !== "") {
+      writer.uint32(18).string(message.symbol);
+    }
+    if (message.price !== 0) {
+      writer.uint32(24).uint64(message.price);
+    }
+    if (message.amount !== 0) {
+      writer.uint32(32).uint64(message.amount);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgGetCoin {
+  decode(input: Reader | Uint8Array, length?: number): MsgRegisterCoin {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgGetCoin } as MsgGetCoin;
+    const message = { ...baseMsgRegisterCoin } as MsgRegisterCoin;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
           message.creator = reader.string();
           break;
+        case 2:
+          message.symbol = reader.string();
+          break;
+        case 3:
+          message.price = longToNumber(reader.uint64() as Long);
+          break;
+        case 4:
+          message.amount = longToNumber(reader.uint64() as Long);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -176,61 +207,143 @@ export const MsgGetCoin = {
     return message;
   },
 
-  fromJSON(object: any): MsgGetCoin {
-    const message = { ...baseMsgGetCoin } as MsgGetCoin;
+  fromJSON(object: any): MsgRegisterCoin {
+    const message = { ...baseMsgRegisterCoin } as MsgRegisterCoin;
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = String(object.creator);
     } else {
       message.creator = "";
     }
+    if (object.symbol !== undefined && object.symbol !== null) {
+      message.symbol = String(object.symbol);
+    } else {
+      message.symbol = "";
+    }
+    if (object.price !== undefined && object.price !== null) {
+      message.price = Number(object.price);
+    } else {
+      message.price = 0;
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = Number(object.amount);
+    } else {
+      message.amount = 0;
+    }
     return message;
   },
 
-  toJSON(message: MsgGetCoin): unknown {
+  toJSON(message: MsgRegisterCoin): unknown {
     const obj: any = {};
     message.creator !== undefined && (obj.creator = message.creator);
+    message.symbol !== undefined && (obj.symbol = message.symbol);
+    message.price !== undefined && (obj.price = message.price);
+    message.amount !== undefined && (obj.amount = message.amount);
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgGetCoin>): MsgGetCoin {
-    const message = { ...baseMsgGetCoin } as MsgGetCoin;
+  fromPartial(object: DeepPartial<MsgRegisterCoin>): MsgRegisterCoin {
+    const message = { ...baseMsgRegisterCoin } as MsgRegisterCoin;
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = object.creator;
     } else {
       message.creator = "";
     }
+    if (object.symbol !== undefined && object.symbol !== null) {
+      message.symbol = object.symbol;
+    } else {
+      message.symbol = "";
+    }
+    if (object.price !== undefined && object.price !== null) {
+      message.price = object.price;
+    } else {
+      message.price = 0;
+    }
+    if (object.amount !== undefined && object.amount !== null) {
+      message.amount = object.amount;
+    } else {
+      message.amount = 0;
+    }
     return message;
   },
 };
 
-const baseMsgGetCoinResponse: object = { denom: "", amount: "" };
+const baseMsgRegisterCoinResponse: object = {};
 
-export const MsgGetCoinResponse = {
-  encode(
-    message: MsgGetCoinResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
-    if (message.denom !== "") {
-      writer.uint32(10).string(message.denom);
+export const MsgRegisterCoinResponse = {
+  encode(_: MsgRegisterCoinResponse, writer: Writer = Writer.create()): Writer {
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgRegisterCoinResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = {
+      ...baseMsgRegisterCoinResponse,
+    } as MsgRegisterCoinResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
     }
-    if (message.amount !== "") {
-      writer.uint32(18).string(message.amount);
+    return message;
+  },
+
+  fromJSON(_: any): MsgRegisterCoinResponse {
+    const message = {
+      ...baseMsgRegisterCoinResponse,
+    } as MsgRegisterCoinResponse;
+    return message;
+  },
+
+  toJSON(_: MsgRegisterCoinResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial(
+    _: DeepPartial<MsgRegisterCoinResponse>
+  ): MsgRegisterCoinResponse {
+    const message = {
+      ...baseMsgRegisterCoinResponse,
+    } as MsgRegisterCoinResponse;
+    return message;
+  },
+};
+
+const baseMsgBuyCoin: object = { creator: "", symbol: "", amount: 0 };
+
+export const MsgBuyCoin = {
+  encode(message: MsgBuyCoin, writer: Writer = Writer.create()): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.symbol !== "") {
+      writer.uint32(18).string(message.symbol);
+    }
+    if (message.amount !== 0) {
+      writer.uint32(24).uint64(message.amount);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgGetCoinResponse {
+  decode(input: Reader | Uint8Array, length?: number): MsgBuyCoin {
     const reader = input instanceof Uint8Array ? new Reader(input) : input;
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgGetCoinResponse } as MsgGetCoinResponse;
+    const message = { ...baseMsgBuyCoin } as MsgBuyCoin;
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.denom = reader.string();
+          message.creator = reader.string();
           break;
         case 2:
-          message.amount = reader.string();
+          message.symbol = reader.string();
+          break;
+        case 3:
+          message.amount = longToNumber(reader.uint64() as Long);
           break;
         default:
           reader.skipType(tag & 7);
@@ -240,40 +353,89 @@ export const MsgGetCoinResponse = {
     return message;
   },
 
-  fromJSON(object: any): MsgGetCoinResponse {
-    const message = { ...baseMsgGetCoinResponse } as MsgGetCoinResponse;
-    if (object.denom !== undefined && object.denom !== null) {
-      message.denom = String(object.denom);
+  fromJSON(object: any): MsgBuyCoin {
+    const message = { ...baseMsgBuyCoin } as MsgBuyCoin;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
     } else {
-      message.denom = "";
+      message.creator = "";
+    }
+    if (object.symbol !== undefined && object.symbol !== null) {
+      message.symbol = String(object.symbol);
+    } else {
+      message.symbol = "";
     }
     if (object.amount !== undefined && object.amount !== null) {
-      message.amount = String(object.amount);
+      message.amount = Number(object.amount);
     } else {
-      message.amount = "";
+      message.amount = 0;
     }
     return message;
   },
 
-  toJSON(message: MsgGetCoinResponse): unknown {
+  toJSON(message: MsgBuyCoin): unknown {
     const obj: any = {};
-    message.denom !== undefined && (obj.denom = message.denom);
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.symbol !== undefined && (obj.symbol = message.symbol);
     message.amount !== undefined && (obj.amount = message.amount);
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgGetCoinResponse>): MsgGetCoinResponse {
-    const message = { ...baseMsgGetCoinResponse } as MsgGetCoinResponse;
-    if (object.denom !== undefined && object.denom !== null) {
-      message.denom = object.denom;
+  fromPartial(object: DeepPartial<MsgBuyCoin>): MsgBuyCoin {
+    const message = { ...baseMsgBuyCoin } as MsgBuyCoin;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
     } else {
-      message.denom = "";
+      message.creator = "";
+    }
+    if (object.symbol !== undefined && object.symbol !== null) {
+      message.symbol = object.symbol;
+    } else {
+      message.symbol = "";
     }
     if (object.amount !== undefined && object.amount !== null) {
       message.amount = object.amount;
     } else {
-      message.amount = "";
+      message.amount = 0;
     }
+    return message;
+  },
+};
+
+const baseMsgBuyCoinResponse: object = {};
+
+export const MsgBuyCoinResponse = {
+  encode(_: MsgBuyCoinResponse, writer: Writer = Writer.create()): Writer {
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgBuyCoinResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgBuyCoinResponse } as MsgBuyCoinResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgBuyCoinResponse {
+    const message = { ...baseMsgBuyCoinResponse } as MsgBuyCoinResponse;
+    return message;
+  },
+
+  toJSON(_: MsgBuyCoinResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial(_: DeepPartial<MsgBuyCoinResponse>): MsgBuyCoinResponse {
+    const message = { ...baseMsgBuyCoinResponse } as MsgBuyCoinResponse;
     return message;
   },
 };
@@ -281,8 +443,9 @@ export const MsgGetCoinResponse = {
 /** Msg defines the Msg service. */
 export interface Msg {
   MintCoin(request: MsgMintCoin): Promise<MsgMintCoinResponse>;
+  RegisterCoin(request: MsgRegisterCoin): Promise<MsgRegisterCoinResponse>;
   /** this line is used by starport scaffolding # proto/tx/rpc */
-  GetCoin(request: MsgGetCoin): Promise<MsgGetCoinResponse>;
+  BuyCoin(request: MsgBuyCoin): Promise<MsgBuyCoinResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -296,10 +459,22 @@ export class MsgClientImpl implements Msg {
     return promise.then((data) => MsgMintCoinResponse.decode(new Reader(data)));
   }
 
-  GetCoin(request: MsgGetCoin): Promise<MsgGetCoinResponse> {
-    const data = MsgGetCoin.encode(request).finish();
-    const promise = this.rpc.request("sujine.test.test.Msg", "GetCoin", data);
-    return promise.then((data) => MsgGetCoinResponse.decode(new Reader(data)));
+  RegisterCoin(request: MsgRegisterCoin): Promise<MsgRegisterCoinResponse> {
+    const data = MsgRegisterCoin.encode(request).finish();
+    const promise = this.rpc.request(
+      "sujine.test.test.Msg",
+      "RegisterCoin",
+      data
+    );
+    return promise.then((data) =>
+      MsgRegisterCoinResponse.decode(new Reader(data))
+    );
+  }
+
+  BuyCoin(request: MsgBuyCoin): Promise<MsgBuyCoinResponse> {
+    const data = MsgBuyCoin.encode(request).finish();
+    const promise = this.rpc.request("sujine.test.test.Msg", "BuyCoin", data);
+    return promise.then((data) => MsgBuyCoinResponse.decode(new Reader(data)));
   }
 }
 
