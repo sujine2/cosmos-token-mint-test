@@ -97,7 +97,7 @@ export interface TestSellCoin {
 export interface TestSymbolList {
   index?: string;
   creator?: string;
-  symbole?: string;
+  symbol?: string;
 }
 
 /**

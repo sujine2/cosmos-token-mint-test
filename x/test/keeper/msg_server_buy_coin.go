@@ -16,9 +16,7 @@ func (k msgServer) BuyCoin(goCtx context.Context, msg *types.MsgBuyCoin) (*types
 	if isFound {
 		if getCoin.Amount < msg.Amount {
 			return nil, sdkerrors.Wrap(types.ErrInsufficientAmount, "Too many coins")
-		}
-		//base, _ := sdk.GetBaseDenom()
-		//buyAmount := sdk.Coins{sdk.NewInt64Coin(base, int64(msg.Amount)*int64(getCoin.Price))} 
+		} 
 
 		addressBuyer, _ := sdk.AccAddressFromBech32(msg.Creator) 
 		addressSeller, _ := sdk.AccAddressFromBech32(getCoin.Creator) 
@@ -36,9 +34,9 @@ func (k msgServer) BuyCoin(goCtx context.Context, msg *types.MsgBuyCoin) (*types
 		resultAmount := getCoin.Amount - msg.Amount
 
 		newSell := types.SellCoin{
-			Index:   getCoin.Symbole,
+			Index:   getCoin.Symbol,
 			Creator: getCoin.Creator,
-			Symbole: getCoin.Symbole,
+			Symbol: getCoin.Symbol,
 			Price:   getCoin.Price,
 			Amount:  resultAmount,
 		}

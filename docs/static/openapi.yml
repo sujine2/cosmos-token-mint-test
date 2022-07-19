@@ -30080,7 +30080,7 @@ paths:
                       type: string
                     creator:
                       type: string
-                    symbole:
+                    symbol:
                       type: string
               pagination:
                 type: object
@@ -30203,7 +30203,7 @@ paths:
                     type: string
                   creator:
                     type: string
-                  symbole:
+                  symbol:
                     type: string
         default:
           description: An unexpected error response.
@@ -52003,7 +52003,7 @@ definitions:
               type: string
             creator:
               type: string
-            symbole:
+            symbol:
               type: string
       pagination:
         type: object
@@ -52065,7 +52065,7 @@ definitions:
             type: string
           creator:
             type: string
-          symbole:
+          symbol:
             type: string
   sujine.test.test.QueryParamsResponse:
     type: object
@@ -52096,7 +52096,7 @@ definitions:
         type: string
       creator:
         type: string
-      symbole:
+      symbol:
         type: string
   tendermint.spn.claim.ClaimRecord:
     type: object

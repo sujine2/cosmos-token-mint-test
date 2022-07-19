@@ -25,9 +25,9 @@ func (k msgServer) RegisterCoin(goCtx context.Context, msg *types.MsgRegisterCoi
 		}
 
 		newSell := types.SellCoin{
-			Index:   sell.Symbole,
+			Index:   sell.Symbol,
 			Creator: sell.Creator,
-			Symbole: sell.Symbole,
+			Symbol: sell.Symbol,
 			Price:   msg.Price,
 			Amount:  msg.Amount,
 		}

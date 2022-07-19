@@ -6,10 +6,10 @@ export const protobufPackage = "sujine.test.test";
 export interface SymbolList {
   index: string;
   creator: string;
-  symbole: string;
+  symbol: string;
 }
 
-const baseSymbolList: object = { index: "", creator: "", symbole: "" };
+const baseSymbolList: object = { index: "", creator: "", symbol: "" };
 
 export const SymbolList = {
   encode(message: SymbolList, writer: Writer = Writer.create()): Writer {
@@ -19,8 +19,8 @@ export const SymbolList = {
     if (message.creator !== "") {
       writer.uint32(18).string(message.creator);
     }
-    if (message.symbole !== "") {
-      writer.uint32(26).string(message.symbole);
+    if (message.symbol !== "") {
+      writer.uint32(26).string(message.symbol);
     }
     return writer;
   },
@@ -39,7 +39,7 @@ export const SymbolList = {
           message.creator = reader.string();
           break;
         case 3:
-          message.symbole = reader.string();
+          message.symbol = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -61,10 +61,10 @@ export const SymbolList = {
     } else {
       message.creator = "";
     }
-    if (object.symbole !== undefined && object.symbole !== null) {
-      message.symbole = String(object.symbole);
+    if (object.symbol !== undefined && object.symbol !== null) {
+      message.symbol = String(object.symbol);
     } else {
-      message.symbole = "";
+      message.symbol = "";
     }
     return message;
   },
@@ -73,7 +73,7 @@ export const SymbolList = {
     const obj: any = {};
     message.index !== undefined && (obj.index = message.index);
     message.creator !== undefined && (obj.creator = message.creator);
-    message.symbole !== undefined && (obj.symbole = message.symbole);
+    message.symbol !== undefined && (obj.symbol = message.symbol);
     return obj;
   },
 
@@ -89,10 +89,10 @@ export const SymbolList = {
     } else {
       message.creator = "";
     }
-    if (object.symbole !== undefined && object.symbole !== null) {
-      message.symbole = object.symbole;
+    if (object.symbol !== undefined && object.symbol !== null) {
+      message.symbol = object.symbol;
     } else {
-      message.symbole = "";
+      message.symbol = "";
     }
     return message;
   },

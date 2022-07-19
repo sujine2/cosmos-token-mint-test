@@ -6,6 +6,6 @@ option go_package = "github.com/sujine/test/x/test/types";
 message SymbolList {
   string index = 1; 
   string creator = 2; 
-  string symbole = 3; 
+  string symbol = 3; 
 }
 
