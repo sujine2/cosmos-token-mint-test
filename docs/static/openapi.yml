@@ -29899,7 +29899,7 @@ paths:
                       type: string
                     creator:
                       type: string
-                    symbole:
+                    symbol:
                       type: string
                     price:
                       type: string
@@ -30028,7 +30028,7 @@ paths:
                     type: string
                   creator:
                     type: string
-                  symbole:
+                  symbol:
                     type: string
                   price:
                     type: string
@@ -51958,7 +51958,7 @@ definitions:
               type: string
             creator:
               type: string
-            symbole:
+            symbol:
               type: string
             price:
               type: string
@@ -52047,7 +52047,7 @@ definitions:
             type: string
           creator:
             type: string
-          symbole:
+          symbol:
             type: string
           price:
             type: string
@@ -52081,7 +52081,7 @@ definitions:
         type: string
       creator:
         type: string
-      symbole:
+      symbol:
         type: string
       price:
         type: string

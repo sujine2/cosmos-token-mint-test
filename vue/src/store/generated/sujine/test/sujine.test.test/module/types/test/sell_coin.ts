@@ -7,7 +7,7 @@ export const protobufPackage = "sujine.test.test";
 export interface SellCoin {
   index: string;
   creator: string;
-  symbole: string;
+  symbol: string;
   price: number;
   amount: number;
 }
@@ -15,7 +15,7 @@ export interface SellCoin {
 const baseSellCoin: object = {
   index: "",
   creator: "",
-  symbole: "",
+  symbol: "",
   price: 0,
   amount: 0,
 };
@@ -28,8 +28,8 @@ export const SellCoin = {
     if (message.creator !== "") {
       writer.uint32(18).string(message.creator);
     }
-    if (message.symbole !== "") {
-      writer.uint32(26).string(message.symbole);
+    if (message.symbol !== "") {
+      writer.uint32(26).string(message.symbol);
     }
     if (message.price !== 0) {
       writer.uint32(32).uint64(message.price);
@@ -54,7 +54,7 @@ export const SellCoin = {
           message.creator = reader.string();
           break;
         case 3:
-          message.symbole = reader.string();
+          message.symbol = reader.string();
           break;
         case 4:
           message.price = longToNumber(reader.uint64() as Long);
@@ -82,10 +82,10 @@ export const SellCoin = {
     } else {
       message.creator = "";
     }
-    if (object.symbole !== undefined && object.symbole !== null) {
-      message.symbole = String(object.symbole);
+    if (object.symbol !== undefined && object.symbol !== null) {
+      message.symbol = String(object.symbol);
     } else {
-      message.symbole = "";
+      message.symbol = "";
     }
     if (object.price !== undefined && object.price !== null) {
       message.price = Number(object.price);
@@ -104,7 +104,7 @@ export const SellCoin = {
     const obj: any = {};
     message.index !== undefined && (obj.index = message.index);
     message.creator !== undefined && (obj.creator = message.creator);
-    message.symbole !== undefined && (obj.symbole = message.symbole);
+    message.symbol !== undefined && (obj.symbol = message.symbol);
     message.price !== undefined && (obj.price = message.price);
     message.amount !== undefined && (obj.amount = message.amount);
     return obj;
@@ -122,10 +122,10 @@ export const SellCoin = {
     } else {
       message.creator = "";
     }
-    if (object.symbole !== undefined && object.symbole !== null) {
-      message.symbole = object.symbole;
+    if (object.symbol !== undefined && object.symbol !== null) {
+      message.symbol = object.symbol;
     } else {
-      message.symbole = "";
+      message.symbol = "";
     }
     if (object.price !== undefined && object.price !== null) {
       message.price = object.price;
